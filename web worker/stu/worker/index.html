@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>输入</p>
+<input type="text" id='input'>
+<p>输出</p>
+<p id="output"></p>
+
+<script>
+    var worker = new Worker('woker.js');
+
+    var input = document.querySelector('#input');
+    var output = document.querySelector('#output');
+
+    input.onchange = function () {
+        worker.postMessage(input.value);
+
+    }
+
+    worker.onmessage = function (e) {
+        output.textContent = e.data;
+    }
+</script>
+</body>
+</html>

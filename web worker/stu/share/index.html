@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>输入</p>
+<input type="text" id='input'>
+<p>输出</p>
+<p id="output"></p>
+
+<script>
+    var worker = new SharedWorker('woker.js');
+
+    var input = document.querySelector('#input');
+    var output = document.querySelector('#output');
+
+    input.onchange = function () {
+        worker.port.postMessage(input.value);
+    }
+
+    worker.port.onmessage = function (e) {
+        console.log(e);
+//        output.textContent = e.data;
+        output.textContent = e.data[0];
+//        console.log(e.data);
+//        console.log(e.data[1]);
+//        console.log(e.data[2]);
+    }
+</script>
+</body>
+</html>

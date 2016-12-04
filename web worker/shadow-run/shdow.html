@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+//    var worker = new SharedWorker('sharedworker.js', 'mysharedworker');
+    var worker = new SharedWorker('sharedworker.js');
+
+    // 从端口接收数据 , 包括文本数据以及结构化数据
+    worker.port.onmessage = function (event) {
+        console.log(event.data);
+        console.log('接受打印了数据');
+    };
+    // 向端口发送普通文本数据
+    worker.port.postMessage('put your message here … ');
+    // 向端口发送结构化数据
+//    worker.port.postMessage({ username: 'usertext', live_city:
+//            ['data-one', 'data-two', 'data-three','data-four']});
+
+
+    //
+
+
+</script>
+</body>
+</html>

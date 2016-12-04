@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var str = "!内容 !!同盟会的政治纲领是“驱除鞑虏，恢复中华，创立民国，平均地权”。 !!孙中山将同盟会的纲领概括为三大主义，即民族主义、民权主义、民生主义，后被称为三民主义。 !!!民族主义，即民族革命，包括“驱除鞑虏，恢复中华”两项内容。 !!!民权主义即政治革命，内容是“创立民国”，即建立资产阶级民主共和国。 !!!民生主义即社会革命，指的是“平均地权”。 !评价: !!它初步描绘出中国还不曾有过的资产阶级共和国方案，是一个比较完整而明确的资产阶级民主革命纲领。!!对推动革命的发展产生了重大而积极的影响。 !!但它并不是一个彻底的资产阶级民主革命纲领。";
+
+
+    //提取文字创建数组
+    var pt = /!+[^!]+(?=!)/g;
+    var arr = str.match(pt);
+    console.log(arr)
+
+    //遍历数组，将数组中每个元素创建为一个节点实例
+    var nodes = [];
+    for (var i in arr) {
+        var obj = {};
+        obj.id = i;
+        var len = arr[i].length;
+        obj.title = arr[i].replace(/!/g, "");
+        obj.level = len - obj.title.length;
+        if (obj.level == 1)obj.parent = -1;
+        else obj.parent = findparent(obj.level, obj.id).id;
+        obj.childrenids = [];
+        nodes.push(obj);
+    }
+
+    console.log(nodes)
+
+    //遍历数组，为每个节点补上子节点集合
+    for (var i in nodes) {
+        nodes[i].childrenids = findchildrenid(nodes[i].id);
+    }
+
+    //转化为json数组
+    var json = {
+        title: "方案",
+        id: -1,
+        parent: -1,
+        level: -1,
+        childrenids: findchildrenid(-1)
+    }
+
+    createjson(json, json.childrenids);
+
+    function createjson(node, idarr) {
+        var c = [];
+        for (var i in idarr) {
+            c.push(findbyid(idarr[i]));
+        }
+        node.children = c;
+
+        for (var i in c) {
+            createjson(c[i], c[i].childrenids);
+        }
+    }
+
+    console.log(JSON.stringify(json, null, "\t"))
+
+    //遍历获取 子元素.parent(id) == 传入id的数组（子元素id注册的数组）
+    function findchildrenid(id) {
+        var arr = [];
+        for (var i in nodes) {
+            if (nodes[i].parent == id)arr.push(nodes[i].id);
+        }
+        return arr;
+    }
+
+    //获取最接近的
+    function findparent(level, id) {
+        var parr = findbylevel(level - 1);
+        var n = {}, sub;
+        for (var i in parr) {
+            if (parr[i].id < id) {
+                if (i == 0 || id - parr[i].id < sub) {
+                    sub = id - parr[i].id;
+                    n = parr[i];
+                }
+            }
+        }
+        return n;
+
+    }
+    //获取上一级的所有元素
+    function findbylevel(level) {
+        var arr = [];
+        for (var i in nodes) {
+            if (nodes[i].level == level)arr.push(nodes[i]);
+        }
+        return arr;
+    }
+
+    function findbyid(id) {
+        for (var i in nodes)if (nodes[i].id == id)return nodes[i];
+        return {};
+    }
+</script>
+</body>
+</html>

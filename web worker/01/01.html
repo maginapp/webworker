@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var worker = new Worker('01.js');
+    var worker = new Worker('02.js');
+
+    worker.onmessage = function (e) {
+
+        console.log(e);
+        console.log(e.data);
+
+    };
+
+
+//var buffer = [11,10,01,20];
+
+//worker.postMessage({
+//     operation: 'list_all_users',
+//     //ArrayBuffer object
+//     input: buffer,
+//     threshold: 0.8,
+// }, [buffer]);
+</script>
+</body>
+</html>

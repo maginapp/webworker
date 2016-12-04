@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var str = '!ss!ss!ff!!gggg!!!as';
+    var reg = /!+[^!]+(?=!)/g;
+    var arr = str.match(reg);
+    console.log(arr);
+</script>
+</body>
+</html>
